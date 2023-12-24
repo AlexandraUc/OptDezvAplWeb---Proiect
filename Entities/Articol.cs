@@ -1,4 +1,6 @@
-﻿namespace Proiect.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace Proiect.Entities
 {
     public class Articol
     {

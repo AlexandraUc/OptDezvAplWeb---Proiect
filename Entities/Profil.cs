@@ -1,4 +1,6 @@
-﻿namespace Proiect.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace Proiect.Entities
 {
     public class Profil
     {
@@ -12,6 +14,8 @@
         public Utilizator? Utilizator { get; set; }
 
         // Many to many cu Articol
+        // Ignora lista la serializare (de modificat cu dto ulterior)
+        [JsonIgnore]
         public ICollection<Articol>? Articole {  get; set; } = new List<Articol>();
         public Profil(int Id, string Nume, string Prenume, string Bio, int? UtilizatorId) {
             this.Id = Id;

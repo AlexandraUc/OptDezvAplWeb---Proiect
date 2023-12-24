@@ -12,8 +12,8 @@ using Proiect.ContextModels;
 namespace Proiect.Migrations
 {
     [DbContext(typeof(ProiectContext))]
-    [Migration("20231224003036_M1")]
-    partial class M1
+    [Migration("20231224200942_M")]
+    partial class M
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
