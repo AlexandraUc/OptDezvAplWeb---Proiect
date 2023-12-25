@@ -12,7 +12,7 @@ using Proiect.ContextModels;
 namespace Proiect.Migrations
 {
     [DbContext(typeof(ProiectContext))]
-    [Migration("20231224200942_M")]
+    [Migration("20231225004230_M")]
     partial class M
     {
         /// <inheritdoc />

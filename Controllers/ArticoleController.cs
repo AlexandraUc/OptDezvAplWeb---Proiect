@@ -23,21 +23,47 @@ namespace Proiect.Controllers
             if(_context.Articol == null)
                 return NotFound();
 
-            // Ia si profilurile asociate
-            var articole = _context.Articol.Include(a => a.Profiluri).ToList();
+            var articole = await _context.Articol.ToListAsync();
 
             return Ok(articole);
+        }
 
+        // Get grupate dupa autor ordonate dupa UtilizatorId si articolele ordonate dupa titlu
+        [HttpGet("grupat_dupa")]
+        public async Task<IActionResult> GetArticoleGrupate()
+        {
+            if(_context == null)
+                return NotFound();
+
+            var groupedArticole = await _context.Articol
+                .GroupBy(a => a.UtilizatorId)
+                .OrderBy(a => a.Key)
+                .Select(grup => new         // Fiecare grup o sa fie reprezentat de un UtilizatorId si o                       
+                {                                    // lista de articole ordonate dupa titlu
+                    UtilizatorId = grup.Key,
+                    Articole = grup.OrderBy(a => a.Titlu).ToList()
+                })
+                .ToListAsync();
+
+            return Ok(groupedArticole);
+        }
+
+        // Get articole scrise de un anumit autor ordonate alfabtic
+        [HttpGet("scris_de/{utilizatorId}")]
+        public async Task<IActionResult> GetArticoleAutor(int utilizatorId)
+        {
+            var articole = await _context.Articol.Where(x => x.UtilizatorId == utilizatorId).
+                OrderBy(x => x.Titlu).ToListAsync();
+            return Ok(articole);
         }
 
         // Get cu id
         [HttpGet("{id}")]
         public async Task<IActionResult> GetArticol(int id)
         {
-            var articol = await _context.Articol.Include(a => a.Profiluri).
-                                FirstOrDefaultAsync(a => a.Id == id);
+            var articol = await _context.Articol.FindAsync(id);
 
-            if(articol == null)
+            if (articol == null)
                 return NotFound();
 
             return Ok(articol);

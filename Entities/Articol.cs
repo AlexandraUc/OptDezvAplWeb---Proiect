@@ -8,11 +8,13 @@ namespace Proiect.Entities
         public string Titlu { get; set; }
         public string Continut { get; set; }
 
-        // One to many cu Utilizator
+        // One to many cu Utilizator, autorul articolului
         public int? UtilizatorId { get; set; }
         public Utilizator? Utilizator { get; set; }
 
         // Many to many cu Profil (mai multe profile pot avea la favorite mai multe articole)
+        // Ignora lista la serializare (de modificat cu dto ulterior)
+        [JsonIgnore]
         public ICollection<Profil>? Profiluri { get; set; }
         public Articol(int Id, string Titlu, string Continut, int? UtilizatorId) {
             this.Id = Id;

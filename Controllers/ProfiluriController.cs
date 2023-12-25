@@ -22,14 +22,15 @@ namespace Proiect.Controllers
             if(_context.Profil == null)
                 return NotFound();
 
-            return Ok(await _context.Profil.ToListAsync());
+            return Ok(await _context.Profil.Include(p => p.Articole).ToListAsync());
         }
 
         // Get cu id
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProfil(int id)
         {
-            var profil = await _context.Profil.FindAsync(id);
+            var profil = await _context.Profil.Include(p => p.Articole).
+                                        FirstOrDefaultAsync(x => x.Id == id);
 
             if(profil == null)
                 return NotFound();

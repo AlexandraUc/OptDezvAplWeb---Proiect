@@ -26,6 +26,23 @@ namespace Proiect.Controllers
             return Ok(await _context.Utilizator.ToListAsync());
         }
 
+        // Get cu date din profil
+        [HttpGet("cu_profil/{id}")]
+        public async Task<IActionResult> GetUtilizatorProfil(int id)
+        {
+            var utInfo = await _context.Utilizator
+                .Join(_context.Profil, u => u.Id, p => p.UtilizatorId, (u, p) => new
+                {
+                    u.Id,
+                    p.Nume,
+                    p.Prenume,
+                    u.Email,
+                    u.Rol
+                }).FirstOrDefaultAsync(u => u.Id == id);
+
+            return Ok(utInfo);
+        }
+
         // Get cu id
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUtilizator(int id)
