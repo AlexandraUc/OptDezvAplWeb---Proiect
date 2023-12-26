@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Proiect.ContextModels;
+using Proiect.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ProiectContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Proiect")));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<IUtilizatorRepository, UtilizatorRepository>();
+builder.Services.AddScoped<IArticolRepository, ArticolRepository>();
+builder.Services.AddScoped<IProfilRepository, ProfilRepository>();
+
 
 var app = builder.Build();
 

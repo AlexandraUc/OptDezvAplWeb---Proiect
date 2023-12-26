@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Proiect.ContextModels;
 using Proiect.Entities;
+using Proiect.Repositories;
 
 namespace Proiect.Controllers
 {
@@ -10,10 +12,12 @@ namespace Proiect.Controllers
     public class UtilizatoriController : ControllerBase
     {
         private readonly ProiectContext _context;
+        private readonly IUtilizatorRepository _utilizatorRepository;
 
-        public UtilizatoriController(ProiectContext context)
+        public UtilizatoriController(ProiectContext context, IUtilizatorRepository utilizatorRepository)
         {
             _context = context;
+            _utilizatorRepository = utilizatorRepository;
         }
 
         // Get
@@ -23,23 +27,19 @@ namespace Proiect.Controllers
             if (_context.Utilizator == null)
                 return NotFound();
 
-            return Ok(await _context.Utilizator.ToListAsync());
+            var utilizatori = await _utilizatorRepository.GetUtilizatoriAsync();
+
+            if(utilizatori == null)
+                return NotFound();
+
+            return Ok(utilizatori);
         }
 
         // Get cu date din profil
         [HttpGet("cu_profil/{id}")]
         public async Task<IActionResult> GetUtilizatorProfil(int id)
         {
-            var utInfo = await _context.Utilizator
-                .Join(_context.Profil, u => u.Id, p => p.UtilizatorId, (u, p) => new
-                {
-                    u.Id,
-                    p.Nume,
-                    p.Prenume,
-                    u.Email,
-                    u.Rol
-                }).FirstOrDefaultAsync(u => u.Id == id);
-
+            var utInfo = await _utilizatorRepository.GetUtilizatorProfilDtoAsync(id);
             return Ok(utInfo);
         }
 
@@ -47,7 +47,7 @@ namespace Proiect.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUtilizator(int id)
         {
-            var utilizator = await _context.Utilizator.FindAsync(id);
+            var utilizator = await _utilizatorRepository.GetUtilizatorAsync(id);
             
             if(utilizator == null)
                 return NotFound();
@@ -72,11 +72,7 @@ namespace Proiect.Controllers
             if(ut == null)
                 return NotFound();
 
-            // Updateaza utilizatorul dupa ce stim ca exista
-            _context.Utilizator.Update(utilizator);
-            await _context.SaveChangesAsync();
-
-            // Returneaza utilizatorul modificat
+            await _utilizatorRepository.PutUtilizatorAsync(utilizator);
             return Ok(utilizator);
         }
 
@@ -87,12 +83,8 @@ namespace Proiect.Controllers
             if(!ModelState.IsValid)
                 return BadRequest();
 
-            // Adauga utilizator
-            _context.Utilizator.Add(utilizator);
-            await _context.SaveChangesAsync();
-
-            // Returneaza noul utilizator
-            return Ok(utilizator);
+            await _utilizatorRepository.PostUtilizatorAsync(utilizator);
+            return NoContent();
         }
 
         // Delete
@@ -104,10 +96,8 @@ namespace Proiect.Controllers
             if(utilizator == null)
                 return NotFound();
 
-            _context.Utilizator.Remove(utilizator);
-            await _context.SaveChangesAsync();
-
-            return Ok(utilizator);
+            await _utilizatorRepository.DeleteUtilizatorAsync(utilizator);
+            return NoContent();
         }
     }
 }

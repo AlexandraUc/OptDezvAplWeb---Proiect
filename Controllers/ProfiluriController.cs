@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Proiect.ContextModels;
 using Proiect.Entities;
+using Proiect.Repositories;
 
 namespace Proiect.Controllers
 {
@@ -10,9 +11,11 @@ namespace Proiect.Controllers
     public class ProfiluriController : ControllerBase
     {
         private readonly ProiectContext _context;
-        public ProfiluriController(ProiectContext context)
+        private readonly IProfilRepository _profilRepository;
+        public ProfiluriController(ProiectContext context, IProfilRepository profilRepository)
         {
             _context = context;
+            _profilRepository = profilRepository;
         }
 
         // Get
@@ -22,15 +25,19 @@ namespace Proiect.Controllers
             if(_context.Profil == null)
                 return NotFound();
 
-            return Ok(await _context.Profil.Include(p => p.Articole).ToListAsync());
+            var profiluri = await _profilRepository.GetProfiluriAsync();
+
+            if(profiluri == null)
+                return NotFound();
+
+            return Ok(profiluri);
         }
 
         // Get cu id
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProfil(int id)
         {
-            var profil = await _context.Profil.Include(p => p.Articole).
-                                        FirstOrDefaultAsync(x => x.Id == id);
+            var profil = await _profilRepository.GetProfilAsync(id);
 
             if(profil == null)
                 return NotFound();
@@ -53,9 +60,7 @@ namespace Proiect.Controllers
             if(pr == null)
                 return NotFound();
 
-            _context.Profil.Update(profil);
-            await _context.SaveChangesAsync();
-
+            await _profilRepository.PutProfilAsync(profil);
             return Ok(profil);
         }
 
@@ -66,10 +71,8 @@ namespace Proiect.Controllers
             if(!ModelState.IsValid)
                 return BadRequest();
 
-            _context.Profil.Add(profil);
-            await _context.SaveChangesAsync();
-
-            return Ok(profil);
+            await _profilRepository.PostProfilAsync(profil);
+            return NoContent();
         }
 
         // Delete
@@ -81,10 +84,8 @@ namespace Proiect.Controllers
             if(profil == null)
                 return NotFound();
 
-            _context.Profil.Remove(profil);
-            await _context.SaveChangesAsync();
-
-            return Ok(profil);
+            await _profilRepository.DeleteProfilAsync(profil);
+            return NoContent();
         }
     }
 }

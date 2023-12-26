@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Proiect.ContextModels;
 using Proiect.Entities;
+using Proiect.Models;
+using Proiect.Repositories;
 
 namespace Proiect.Controllers
 {
@@ -10,10 +12,12 @@ namespace Proiect.Controllers
     public class ArticoleController : ControllerBase
     {
         private readonly ProiectContext _context;
+        private readonly IArticolRepository _articolRepository;
 
-        public ArticoleController(ProiectContext context)
+        public ArticoleController(ProiectContext context, IArticolRepository articolRepository)
         {
             _context = context;
+            _articolRepository = articolRepository;
         }
 
         // Get
@@ -23,7 +27,10 @@ namespace Proiect.Controllers
             if(_context.Articol == null)
                 return NotFound();
 
-            var articole = await _context.Articol.ToListAsync();
+            var articole = await _articolRepository.GetArticoleAsync();
+
+            if(articole == null)
+                return NotFound();
 
             return Ok(articole);
         }
@@ -35,25 +42,23 @@ namespace Proiect.Controllers
             if(_context == null)
                 return NotFound();
 
-            var groupedArticole = await _context.Articol
-                .GroupBy(a => a.UtilizatorId)
-                .OrderBy(a => a.Key)
-                .Select(grup => new         // Fiecare grup o sa fie reprezentat de un UtilizatorId si o                       
-                {                                    // lista de articole ordonate dupa titlu
-                    UtilizatorId = grup.Key,
-                    Articole = grup.OrderBy(a => a.Titlu).ToList()
-                })
-                .ToListAsync();
+            var articole = await _articolRepository.GetArticoleGrupateAsync();
 
-            return Ok(groupedArticole);
+            if (articole == null)
+                return NotFound();
+
+            return Ok(articole);
         }
 
         // Get articole scrise de un anumit autor ordonate alfabtic
         [HttpGet("scris_de/{utilizatorId}")]
         public async Task<IActionResult> GetArticoleAutor(int utilizatorId)
         {
-            var articole = await _context.Articol.Where(x => x.UtilizatorId == utilizatorId).
-                OrderBy(x => x.Titlu).ToListAsync();
+            var articole = await _articolRepository.GetArticolAutorAsync(utilizatorId);
+
+            if(articole == null)
+                return NotFound();
+
             return Ok(articole);
         }
 
@@ -61,12 +66,12 @@ namespace Proiect.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetArticol(int id)
         {
-            var articol = await _context.Articol.FindAsync(id);
+            var articol = await _articolRepository.GetArticolAsync(id);
 
             if (articol == null)
                 return NotFound();
 
-            return Ok(articol);
+            return NoContent();
         }
 
         // Put
@@ -84,9 +89,7 @@ namespace Proiect.Controllers
             if(ar == null)
                 return NotFound();
 
-            _context.Articol.Update(articol);
-            await _context.SaveChangesAsync();
-
+            await _articolRepository.PutArticolAsync(articol);
             return Ok(articol);
         }
 
@@ -97,10 +100,8 @@ namespace Proiect.Controllers
             if(!ModelState.IsValid)
                 return BadRequest();
 
-            _context.Articol.Add(articol);
-            await _context.SaveChangesAsync();
-
-            return Ok(articol);
+            await _articolRepository.PostArticolAsync(articol);
+            return NoContent();
         }
 
         // Delete
@@ -112,10 +113,9 @@ namespace Proiect.Controllers
             if(articol == null) 
                 return NotFound();
 
-            _context.Articol.Remove(articol);
-            await _context.SaveChangesAsync();
+            await _articolRepository.DeleteArticolAsync(articol);
 
-            return Ok(articol);
+            return NoContent();
         }
     }
 }
