@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using Proiect.ContextModels;
@@ -21,6 +22,7 @@ namespace Proiect.Controllers
         }
 
         // Get
+        // [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> GetUtilizatori()
         {
@@ -36,8 +38,9 @@ namespace Proiect.Controllers
         }
 
         // Get cu date din profil
+        // [Authorize(Roles = "Admin")]
         [HttpGet("cu_profil/{id}")]
-        public async Task<IActionResult> GetUtilizatorProfil(int id)
+        public async Task<IActionResult> GetUtilizatorProfil(string id)
         {
             var utInfo = await _utilizatorRepository.GetUtilizatorProfilDtoAsync(id);
             return Ok(utInfo);
@@ -45,7 +48,7 @@ namespace Proiect.Controllers
 
         // Get cu id
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUtilizator(int id)
+        public async Task<IActionResult> GetUtilizator(string id)
         {
             var utilizator = await _utilizatorRepository.GetUtilizatorAsync(id);
             
@@ -57,7 +60,7 @@ namespace Proiect.Controllers
 
         // Put
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUtilizator(int id, Utilizator utilizator)
+        public async Task<IActionResult> PutUtilizator(string id, Utilizator utilizator)
         {
             // Validare parametri
             if (id != utilizator.Id)
@@ -89,7 +92,7 @@ namespace Proiect.Controllers
 
         // Delete
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUtilizator(int id)
+        public async Task<IActionResult> DeleteUtilizator(string id)
         {
             var utilizator = await _context.Utilizator.FindAsync(id);
 

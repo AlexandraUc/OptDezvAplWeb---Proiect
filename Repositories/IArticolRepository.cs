@@ -7,8 +7,7 @@ namespace Proiect.Repositories
     {
         public Task<ICollection<Articol>> GetArticoleAsync();
         public Task<Articol?> GetArticolAsync(int id);
-        public Task<ICollection<Articol>?> GetArticolAutorAsync(int id);
-
+        public Task<ICollection<Articol>?> GetArticolAutorAsync(string id);
         public Task<List<ArticolUtilizatorDto>?> GetArticoleGrupateAsync();
         public Task<Articol> PutArticolAsync(Articol articol);
         public Task PostArticolAsync(Articol articol);

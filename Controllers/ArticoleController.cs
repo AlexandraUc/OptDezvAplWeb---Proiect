@@ -52,7 +52,7 @@ namespace Proiect.Controllers
 
         // Get articole scrise de un anumit autor ordonate alfabtic
         [HttpGet("scris_de/{utilizatorId}")]
-        public async Task<IActionResult> GetArticoleAutor(int utilizatorId)
+        public async Task<IActionResult> GetArticoleAutor(string utilizatorId)
         {
             var articole = await _articolRepository.GetArticolAutorAsync(utilizatorId);
 

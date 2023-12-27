@@ -22,7 +22,7 @@ namespace Proiect.Repositories
             var articol = await _context.Articol.FindAsync(id);
             return articol;
         }
-        public async Task<ICollection<Articol>?> GetArticolAutorAsync(int id)
+        public async Task<ICollection<Articol>?> GetArticolAutorAsync(string id)
         {
             var articol = await _context.Articol.Where(x => x.UtilizatorId == id).
                 OrderBy(x => x.Titlu).ToListAsync();

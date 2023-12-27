@@ -10,12 +10,12 @@ namespace Proiect.Entities
         public string Bio { get; set;}
 
         // One to one cu Utilizator
-        public int? UtilizatorId { get; set; }
+        public string? UtilizatorId { get; set; }
         public Utilizator? Utilizator { get; set; }
 
         // Many to many cu Articol
         public ICollection<Articol>? Articole {  get; set; } = new List<Articol>();
-        public Profil(int Id, string Nume, string Prenume, string Bio, int? UtilizatorId) {
+        public Profil(int Id, string Nume, string Prenume, string Bio, string? UtilizatorId) {
             this.Id = Id;
             this.Nume = Nume;
             this.Prenume = Prenume;

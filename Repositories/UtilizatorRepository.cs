@@ -20,12 +20,12 @@ namespace Proiect.Repositories
             var utilizatori = await _context.Utilizator.ToListAsync();
             return utilizatori;
         }
-        public async Task<Utilizator?> GetUtilizatorAsync(int id)
+        public async Task<Utilizator?> GetUtilizatorAsync(string id)
         {
             var utilizator = await _context.Utilizator.FindAsync(id);
             return utilizator;
         }
-        public async Task<UtilizatorProfilDto?> GetUtilizatorProfilDtoAsync(int id)
+        public async Task<UtilizatorProfilDto?> GetUtilizatorProfilDtoAsync(string id)
         {
             var utilizator = await _context.Utilizator
                 .Join(_context.Profil, u => u.Id, p => p.UtilizatorId, (u, p) => new UtilizatorProfilDto
@@ -33,8 +33,7 @@ namespace Proiect.Repositories
                     Id = u.Id,
                     Nume = p.Nume,
                     Prenume = p.Prenume,
-                    Email = u.Email,
-                    Rol = u.Rol
+                    Email = u.Email
                 }).FirstOrDefaultAsync(u => u.Id == id);
 
             return utilizator;
