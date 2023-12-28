@@ -11,10 +11,14 @@ namespace Proiect.Entities
 
         // One to one cu Utilizator
         public string? UtilizatorId { get; set; }
+
+        [JsonIgnore]
         public Utilizator? Utilizator { get; set; }
 
         // Many to many cu Articol
         public ICollection<Articol>? Articole {  get; set; } = new List<Articol>();
+
+        public Profil() { }
         public Profil(int Id, string Nume, string Prenume, string Bio, string? UtilizatorId) {
             this.Id = Id;
             this.Nume = Nume;

@@ -13,6 +13,10 @@ namespace Proiect.ContextModels
         public ProiectContext(DbContextOptions<ProiectContext> options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Articol>()
+                .HasIndex(u => u.Titlu)
+                .IsUnique();
+
             base.OnModelCreating(builder);
         }
     }

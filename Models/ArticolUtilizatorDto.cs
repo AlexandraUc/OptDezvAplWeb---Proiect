@@ -5,7 +5,7 @@ namespace Proiect.Models
 {
     public class ArticolUtilizatorDto
     {
-        public string? UtilizatorId { get; set; }
+        public string? UserName { get; set; }
         public List<Articol> Articole {  get; set; }
     }
 }

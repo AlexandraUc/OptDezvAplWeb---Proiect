@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
 using Proiect.ContextModels;
 using Proiect.Entities;
+using Proiect.Models;
 using Proiect.Repositories;
 
 namespace Proiect.Controllers
@@ -12,14 +14,17 @@ namespace Proiect.Controllers
     {
         private readonly ProiectContext _context;
         private readonly IProfilRepository _profilRepository;
-        public ProfiluriController(ProiectContext context, IProfilRepository profilRepository)
+        private readonly IMapper _mapper;
+        public ProfiluriController(ProiectContext context, IProfilRepository profilRepository, IMapper mapper)
         {
             _context = context;
             _profilRepository = profilRepository;
+            _mapper = mapper;
         }
 
         // Get
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetProfiluri()
         {
             if(_context.Profil == null)
@@ -35,6 +40,7 @@ namespace Proiect.Controllers
 
         // Get cu id
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetProfil(int id)
         {
             var profil = await _profilRepository.GetProfilAsync(id);
@@ -45,38 +51,33 @@ namespace Proiect.Controllers
             return Ok(profil);
         }
 
-        // Put
+        // Put 
         [HttpPut]
-        public async Task<IActionResult> PutProfil(int  id, Profil profil)
+        [Authorize]
+        public async Task<IActionResult> PutProfil(PostProfilDto profil)
         {
-            if(id != profil.Id)
-                return BadRequest();
+            var userName = User.Identity.Name;
 
-            if(!ModelState.IsValid)
-                return BadRequest();
-
-            var pr = await _context.Profil.FindAsync(id);
-
-            if(pr == null)
-                return NotFound();
-
-            await _profilRepository.PutProfilAsync(profil);
-            return Ok(profil);
+            if (!await _profilRepository.PutProfilAsync(userName, _mapper.Map<Profil>(profil)))
+                return Unauthorized();
+            return Ok();
         }
 
         // Post
         [HttpPost]
-        public async Task<IActionResult> PostProfil(Profil profil)
+        [Authorize]
+        public async Task<IActionResult> PostProfil(PostProfilDto profil)
         {
-            if(!ModelState.IsValid)
-                return BadRequest();
+            var userName = User.Identity.Name;
 
-            await _profilRepository.PostProfilAsync(profil);
-            return NoContent();
+            if (!await _profilRepository.PostProfilAsync(userName, _mapper.Map<Profil>(profil)))
+                return Unauthorized();
+            return Ok();
         }
 
-        // Delete
+        // Delete de admin (poate sterge orice profil)
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteProfil(int id)
         {
             var profil = await _context.Profil.FindAsync(id);
@@ -85,7 +86,20 @@ namespace Proiect.Controllers
                 return NotFound();
 
             await _profilRepository.DeleteProfilAsync(profil);
-            return NoContent();
+            return Ok();
+        }
+
+        // Delete de catre utilizator (isi poate sterge doar propriul profil)
+        [HttpDelete("de-utilizator")]
+        [Authorize]
+        public async Task<IActionResult> DeleteProfilUtilizator()
+        {
+            var userName = User.Identity.Name;
+
+            if (await _profilRepository.DeleteProfilUtilizatorAsync(userName))
+                return Ok();
+
+            return NotFound();
         }
     }
 }

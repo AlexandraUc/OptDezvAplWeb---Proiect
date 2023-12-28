@@ -257,12 +257,16 @@ namespace Proiect.Migrations
 
                     b.Property<string>("Titlu")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UtilizatorId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Titlu")
+                        .IsUnique();
 
                     b.HasIndex("UtilizatorId");
 
@@ -378,7 +382,9 @@ namespace Proiect.Migrations
                 {
                     b.HasOne("Proiect.Entities.Utilizator", "Utilizator")
                         .WithMany("Articole")
-                        .HasForeignKey("UtilizatorId");
+                        .HasForeignKey("UtilizatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Utilizator");
                 });

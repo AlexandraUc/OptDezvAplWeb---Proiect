@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 using Proiect.ContextModels;
 using Proiect.Entities;
 using Proiect.Models;
 using Proiect.Repositories;
+using Proiect.UnitsOfWork;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace Proiect.Controllers
 {
@@ -13,11 +16,15 @@ namespace Proiect.Controllers
     {
         private readonly ProiectContext _context;
         private readonly IArticolRepository _articolRepository;
+        private readonly IArticolProfilUnitOfWork _articolProfilUnitOfWork;
+        private readonly IMapper _mapper;
 
-        public ArticoleController(ProiectContext context, IArticolRepository articolRepository)
+        public ArticoleController(ProiectContext context, IArticolProfilUnitOfWork articolProfilUnitOfWork, IArticolRepository articolRepository, IMapper mapper)
         {
             _context = context;
             _articolRepository = articolRepository;
+            _articolProfilUnitOfWork = articolProfilUnitOfWork;
+            _mapper = mapper;
         }
 
         // Get
@@ -49,12 +56,12 @@ namespace Proiect.Controllers
 
             return Ok(articole);
         }
-
+        
         // Get articole scrise de un anumit autor ordonate alfabtic
-        [HttpGet("scris_de/{utilizatorId}")]
-        public async Task<IActionResult> GetArticoleAutor(string utilizatorId)
+        [HttpGet("scris_de/{userName}")]
+        public async Task<IActionResult> GetArticoleAutor(string userName)
         {
-            var articole = await _articolRepository.GetArticolAutorAsync(utilizatorId);
+            var articole = await _articolRepository.GetArticolAutorAsync(userName);
 
             if(articole == null)
                 return NotFound();
@@ -62,60 +69,77 @@ namespace Proiect.Controllers
             return Ok(articole);
         }
 
-        // Get cu id
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetArticol(int id)
+        // Get cu titlu
+        [HttpGet("{titlu}")]
+        public async Task<IActionResult> GetArticol(string titlu)
         {
-            var articol = await _articolRepository.GetArticolAsync(id);
+            var articol = await _articolRepository.GetArticolAsync(titlu);
 
             if (articol == null)
                 return NotFound();
 
-            return NoContent();
+            return Ok(articol);
         }
 
         // Put
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutArticol(int id, Articol articol)
+        [Authorize(Roles = "Autor")]
+        public async Task<IActionResult> PutArticol(int id, ArticolFaraIdDto articol)
         {
-            if(id != articol.Id)
-                return BadRequest();
+            var userName = User.Identity.Name;
 
-            if(!ModelState.IsValid)
-                return BadRequest();
-
-            var ar = await _context.Articol.FindAsync(id);
+            var ar = await _articolRepository.PutArticolAsync(userName, id, _mapper.Map<Articol>(articol));
 
             if(ar == null)
                 return NotFound();
 
-            await _articolRepository.PutArticolAsync(articol);
             return Ok(articol);
         }
 
         // Post
         [HttpPost]
-        public async Task<IActionResult> PostArticol(Articol articol)
+        [Authorize(Roles = "Autor")]
+        public async Task<IActionResult> PostArticol(ArticolFaraIdDto articol)
         {
-            if(!ModelState.IsValid)
-                return BadRequest();
+            var userName = User.Identity.Name;
 
-            await _articolRepository.PostArticolAsync(articol);
-            return NoContent();
-        }
+            var ar = await _articolRepository.PostArticolAsync(userName, _mapper.Map<Articol>(articol));
 
-        // Delete
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteArticol(int id)
-        {
-            var articol = await _context.Articol.FindAsync(id);
-
-            if(articol == null) 
+            if(ar == null)
                 return NotFound();
 
-            await _articolRepository.DeleteArticolAsync(articol);
+            return Ok();
+        }
 
-            return NoContent();
+        // Delete de admin (poate sterge orice articol)
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteArticol(int id)
+        {
+            var ok = await _articolRepository.DeleteArticolAsync(id);
+
+            if (ok == false)
+                return NotFound();
+
+            return Ok();
+        }
+
+        // Delete de autor (isi poate sterge doar propriul articol)
+        [HttpDelete("dupa/{titlu}")]
+        [Authorize(Roles = "Autor")]
+        public async Task<IActionResult> DeleteArticolUtilizator(string titlu)
+        {
+            var articol = await _articolRepository.GetArticolAsync(titlu);
+
+            if (articol == null)
+                return NotFound();
+
+            var userName = User.FindFirstValue(ClaimTypes.Name);
+
+            if (await _articolRepository.DeleteArticolUtilizatorAsync(userName, articol))
+                return Ok();
+
+            return Unauthorized();
         }
     }
 }

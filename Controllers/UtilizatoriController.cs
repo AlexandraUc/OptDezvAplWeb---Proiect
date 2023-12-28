@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using Proiect.ContextModels;
 using Proiect.Entities;
 using Proiect.Repositories;
@@ -22,8 +20,8 @@ namespace Proiect.Controllers
         }
 
         // Get
-        // [Authorize(Roles = "Admin")]
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUtilizatori()
         {
             if (_context.Utilizator == null)
@@ -38,11 +36,14 @@ namespace Proiect.Controllers
         }
 
         // Get cu date din profil
-        // [Authorize(Roles = "Admin")]
-        [HttpGet("cu_profil/{id}")]
-        public async Task<IActionResult> GetUtilizatorProfil(string id)
+        [HttpGet("cu_profil/{userName}")]
+        public async Task<IActionResult> GetUtilizatorProfil(string userName)
         {
-            var utInfo = await _utilizatorRepository.GetUtilizatorProfilDtoAsync(id);
+            var utInfo = await _utilizatorRepository.GetUtilizatorProfilDtoAsync(userName);
+
+            if (utInfo == null)
+                return NotFound();
+
             return Ok(utInfo);
         }
 
@@ -58,49 +59,16 @@ namespace Proiect.Controllers
             return Ok(utilizator);
         }
 
-        // Put
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUtilizator(string id, Utilizator utilizator)
-        {
-            // Validare parametri
-            if (id != utilizator.Id)
-                return BadRequest();
-
-            // Validare tip parametru
-            if(!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var ut = await _context.Utilizator.FindAsync(id);
-
-            if(ut == null)
-                return NotFound();
-
-            await _utilizatorRepository.PutUtilizatorAsync(utilizator);
-            return Ok(utilizator);
-        }
-
-        // Post
-        [HttpPost]
-        public async Task<IActionResult> PostUtilizator(Utilizator utilizator)
-        {
-            if(!ModelState.IsValid)
-                return BadRequest();
-
-            await _utilizatorRepository.PostUtilizatorAsync(utilizator);
-            return NoContent();
-        }
-
-        // Delete
+        // Delete de admin, poate sterge orice utilizator
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUtilizator(string id)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteUtilizator(string userName)
         {
-            var utilizator = await _context.Utilizator.FindAsync(id);
-
-            if(utilizator == null)
+            if(await _utilizatorRepository.DeleteUtilizatorAsync(userName))
+                return Ok();
+            else
                 return NotFound();
-
-            await _utilizatorRepository.DeleteUtilizatorAsync(utilizator);
-            return NoContent();
         }
+
     }
 }

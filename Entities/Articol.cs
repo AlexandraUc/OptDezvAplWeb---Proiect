@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace Proiect.Entities
 {
@@ -9,14 +10,17 @@ namespace Proiect.Entities
         public string Continut { get; set; }
 
         // One to many cu Utilizator, autorul articolului
-        public string? UtilizatorId { get; set; }
+        public string UtilizatorId { get; set; }
+
+        [JsonIgnore]
         public Utilizator? Utilizator { get; set; }
 
         // Many to many cu Profil (mai multe profile pot avea la favorite mai multe articole)
-        // Ignora lista la serializare (de modificat cu dto ulterior)
+        // Ignora lista la serializare
         [JsonIgnore]
         public ICollection<Profil>? Profiluri { get; set; }
-        public Articol(int Id, string Titlu, string Continut, string? UtilizatorId) {
+        public Articol() { }
+        public Articol(int Id, string Titlu, string Continut, string UtilizatorId) {
             this.Id = Id;
             this.Titlu = Titlu;
             this.Continut = Continut;

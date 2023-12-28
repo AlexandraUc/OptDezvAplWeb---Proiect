@@ -8,6 +8,7 @@ using Proiect.Repositories;
 using System.Text;
 using Proiect.Entities;
 using Proiect.Services;
+using Proiect.UnitsOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
@@ -77,6 +78,8 @@ builder.Services.AddScoped<IUtilizatorRepository, UtilizatorRepository>();
 builder.Services.AddScoped<IArticolRepository, ArticolRepository>();
 builder.Services.AddScoped<IProfilRepository, ProfilRepository>();
 builder.Services.AddScoped<IAutentificareService, AutentificareService>();
+builder.Services.AddScoped<IUtilizatorService, UtilizatorService>();
+builder.Services.AddScoped<IArticolProfilUnitOfWork, ArticolProfilUnitOfWork>();
 
 var app = builder.Build();
 

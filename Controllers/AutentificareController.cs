@@ -6,6 +6,7 @@ using Proiect.Entities;
 using Proiect.Views;
 using Proiect.Roles;
 using Proiect.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Proiect.Controllers
 {
@@ -22,6 +23,15 @@ namespace Proiect.Controllers
             _roleManager = roleManager;
             _autentificareService = autentificareService;
         }
+
+        /*
+        [HttpGet]
+        public async Task<IActionResult> GetName()
+        {
+            var name = User.FindFirstValue(ClaimTypes.Name);
+            return Ok(name);
+        }
+        */
 
         [HttpPost]
         [Route("login")]
@@ -118,6 +128,26 @@ namespace Proiect.Controllers
             await _autentificareService.AtribuieRoluri(utilizator, RolUtilizator.Admin);
             
             return Ok(new Rezultat { Statut = "Succes", Mesaj = "Utilizator creat!" });
+        }
+
+        [HttpPut]
+        [Authorize]
+        [Route("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordModel model)
+        {
+            // Daca exista utilizatorul si e validata parola
+            var utilizator = await _userManager.FindByNameAsync(model.UserName);
+
+            if (utilizator == null)
+                return StatusCode(StatusCodes.Status404NotFound, new Rezultat { Statut = "Eroare", Mesaj = "Nu exista utilizatorul" });
+
+            if(await _userManager.CheckPasswordAsync(utilizator, model.CurrentPassword))
+            {
+                await _userManager.ChangePasswordAsync(utilizator, model.CurrentPassword, model.NewPassword);
+                return Ok(new Rezultat { Statut = "Succes", Mesaj = "Parola schimbata!" });
+            }
+            else
+                return Unauthorized();
         }
     }
 }
