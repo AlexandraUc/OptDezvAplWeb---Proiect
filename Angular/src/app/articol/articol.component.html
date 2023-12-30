@@ -1,0 +1,53 @@
+<h2>Articole</h2>
+<!-- Get Articole
+<button (click)="onClickGetArticole()"></button>
+
+<div *ngIf="articole.length > 0">
+    <h3>Articole:</h3>
+    <ul>
+      <li *ngFor="let articol of articole">
+        <strong>{{ articol.titlu }}</strong> - {{ articol.continut }} (Autor: {{ articol.utilizatorId }})
+      </li>
+    </ul>
+  </div>
+-->
+
+<!-- Get Articole grupate
+<button (click)="onClickGetArticoleGrupate()"></button>
+
+<div *ngFor="let utilizatorDto of articolUtilizatorDtoList">
+  <h3>{{ utilizatorDto.userName }}</h3>
+  <ul>
+    <li *ngFor="let articol of utilizatorDto.articole">
+      {{ articol.titlu }} - {{ articol.continut }}
+    </li>
+  </ul>
+</div>
+-->
+
+<!-- Get articol dupa titlu
+<form [formGroup]="form" (ngSubmit)="onClickGetArticolTitlu()">
+  <label for="titluInput">Titlu:</label>
+  <input type="text" id="titluInput" formControlName="titluInput" placeholder="Introduceti titlu" />
+  <button type="submit">Cauta</button>
+</form>
+
+<p *ngIf="articol">Titlu: {{ articol.titlu }}, Continut: {{ articol.continut }}, Autor: {{ articol.utilizatorId }}</p>
+-->
+
+<!-- Get articole dupa autor -->
+<form [formGroup]="form2" (ngSubmit)="onClickGetArticoleAutor()">
+  <label for="autorInput">Autor:</label>
+  <input type="text" id="autorInput" formControlName="autorInput" placeholder="Introduceti autorul" />
+  <button type="submit">Cauta</button>
+</form>
+
+<div *ngIf="articole2.length > 0">
+  <h3>Articole:</h3>
+  <ul>
+    <li *ngFor="let articol of articole2">
+      <strong>{{ articol.titlu }}</strong> - {{ articol.continut }} (Autor: {{ articol.utilizatorId }})
+    </li>
+  </ul>
+</div>
+

@@ -1,0 +1,23 @@
+<h2>Profiluri</h2>
+
+<!-- Get profiluri -->
+<button (click)="onClickGetProfiluri()">Profiluri</button>
+
+<div *ngIf="profiluri.length > 0">
+    <h3>Profiluri:</h3>
+    <ul>
+      <li *ngFor="let profil of profiluri">
+        Nume: {{ profil.nume }} Prenume: {{ profil.prenume }}
+        Bio:  {{ profil.bio }}
+      </li>
+    </ul>
+</div>
+
+<!-- Get profil dupa id -->
+<form [formGroup]="form" (ngSubmit)="onClickGetProfilId()">
+    <label for="idInput">Id: </label>
+    <input type="text" id="idInput" formControlName="idInput" placeholder="Introduceti id" />
+    <button type="submit">Cauta</button>
+</form>
+
+<p *ngIf="profil">Nume: {{ profil.nume }} Prenume: {{ profil.prenume }} Bio: {{ profil.bio }}</p>
