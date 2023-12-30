@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace Proiect.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]")]  // Endpoint-ul o sa fie api/Articole
     [ApiController]
     public class ArticoleController : ControllerBase
     {

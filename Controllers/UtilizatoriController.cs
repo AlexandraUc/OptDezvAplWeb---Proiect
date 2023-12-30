@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Proiect.ContextModels;
-using Proiect.Entities;
 using Proiect.Repositories;
 
 namespace Proiect.Controllers
@@ -49,6 +48,7 @@ namespace Proiect.Controllers
 
         // Get cu id
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUtilizator(string id)
         {
             var utilizator = await _utilizatorRepository.GetUtilizatorAsync(id);

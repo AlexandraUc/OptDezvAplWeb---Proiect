@@ -5,15 +5,20 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Proiect.ContextModels;
 using Proiect.Repositories;
-using System.Text;
 using Proiect.Entities;
 using Proiect.Services;
 using Proiect.UnitsOfWork;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
 
 // Add services to the container.
+
+builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
+{
+    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
 
 builder.Services.AddDbContext<ProiectContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Proiect")));
@@ -91,6 +96,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("corsapp");
 
 app.UseAuthentication();
 
