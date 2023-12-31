@@ -24,15 +24,6 @@ namespace Proiect.Controllers
             _autentificareService = autentificareService;
         }
 
-        /*
-        [HttpGet]
-        public async Task<IActionResult> GetName()
-        {
-            var name = User.FindFirstValue(ClaimTypes.Name);
-            return Ok(name);
-        }
-        */
-
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)

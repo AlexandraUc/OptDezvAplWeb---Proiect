@@ -1,0 +1,17 @@
+<form [formGroup]="form" (ngSubmit)="onClickRegister()">
+    <label for="userNameInput">Username</label>
+    <input type="text" id="userNameInput" formControlName="userNameInput" placeholder="Username">
+
+    <label for="emailInput">Email</label>
+    <input type="text" id="emailInput" formControlName="emailInput" placeholder="Email">
+
+    <label for="passwordInput">Parola</label>
+    <input type="text" id="passwordInput" formControlName="passwordInput" placeholder="Parola">
+
+    <label for="confirmPasswordInput">Confirmati parola</label>
+    <input type="text" id="confirmPasswordInput" formControlName="confirmPasswordInput" placeholder="Confirmati parola">
+
+    <button type="submit">Register</button>
+</form>
+
+<p *ngIf="invalidRegister">{{ mesajEroare }}</p>
