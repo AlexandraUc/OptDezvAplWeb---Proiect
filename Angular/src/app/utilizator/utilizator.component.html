@@ -33,3 +33,10 @@
     Nume: {{ utilizatorProfil.nume }}
     Prenume: {{ utilizatorProfil.prenume }}
 </p>
+
+<!-- Sterge utilizator de admin -->
+<form [formGroup]="formDelete" (ngSubmit)="onClickDeleteUtilizator()">
+    <label for="userNameInput">UserName: </label>
+    <input type="text" id="userNameInput" formControlName="userNameInput" placeholder="Introduceti UserName">
+    <button type="submit">Sterge</button>
+</form>

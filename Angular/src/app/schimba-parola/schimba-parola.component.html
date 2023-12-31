@@ -1,0 +1,17 @@
+<form [formGroup]="form" (ngSubmit)="onClickSchimbaParola()">
+    <label for="userNameInput">Username</label>
+    <input type="text" id="userNameInput" formControlName="userNameInput" placeholder="Username">
+
+    <label for="passwordInput">Parola</label>
+    <input type="text" id="passwordInput" formControlName="passwordInput" placeholder="Parola">
+
+    <label for="newPasswordInput">Parola noua</label>
+    <input type="text" id="newPasswordInput" formControlName="newPasswordInput" placeholder="Parola noua">
+
+    <label for="confirmPasswordInput">Confirmati parola</label>
+    <input type="text" id="confirmPasswordInput" formControlName="confirmPasswordInput" placeholder="Confirmati parola">
+
+    <button type="submit">Schimba parola</button>
+</form>
+
+<router-outlet></router-outlet>

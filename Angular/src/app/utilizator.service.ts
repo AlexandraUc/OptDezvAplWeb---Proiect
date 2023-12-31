@@ -25,18 +25,25 @@ export class UtilizatorService {
           // E autentificat dar n are permisiunile necesare
           console.error('Forbidden access:', error);
         }
-        return throwError(() => new Error('test'));
+        return throwError(() => new Error(''));
       })
     );
   }
 
   getUtilizatorId(id: string): Observable<Utilizator> {
     const getUtilizatorUrl = `${this.getUtilizatoriUrl}/${id}`;
-    return this.http.get<Utilizator>(getUtilizatorUrl);
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
+    return this.http.get<Utilizator>(getUtilizatorUrl, { headers });
   }
 
   getUtilizatorProfil(userName: string): Observable<UtilizatorProfilDto> {
     const getUtilizatorProfilUrl = `${this.getUtilizatoriUrl}/cu_profil/${userName}`;
     return this.http.get<UtilizatorProfilDto>(getUtilizatorProfilUrl);
+  }
+
+  deleteUtilizator(userName: string): Observable<any> {
+    const deleteUtilizatorUrl = `${this.getUtilizatoriUrl}/${userName}`;
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
+    return this.http.delete<any>(deleteUtilizatorUrl, { headers });
   }
 }

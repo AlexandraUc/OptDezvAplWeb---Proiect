@@ -38,6 +38,10 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  onClickLogout(): void {
+    this.autentificareService.logout();
+  }
+
   login(): void {
     this.autentificareService.login(this.loginInfo).subscribe(
       (response) => {
@@ -49,5 +53,9 @@ export class LoginComponent implements OnInit {
         this.invalidLogin = true;
       }
     );
+  }
+
+  logout(): void {
+    this.autentificareService.logout();
   }
 }

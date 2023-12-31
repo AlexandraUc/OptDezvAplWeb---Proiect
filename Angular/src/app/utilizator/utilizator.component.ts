@@ -20,15 +20,20 @@ export class UtilizatorComponent implements OnInit, OnChanges, OnDestroy {
 
   form!: FormGroup;
   form2!: FormGroup;
+  formDelete!: FormGroup;
 
   constructor(private utilizatorService: UtilizatorService) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
       idInput: new FormControl('')
-    })
+    });
 
     this.form2 = new FormGroup({
+      userNameInput: new FormControl('')
+    });
+
+    this.formDelete = new FormGroup({
       userNameInput: new FormControl('')
     })
   }
@@ -61,6 +66,14 @@ export class UtilizatorComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  onClickDeleteUtilizator(): void {
+    if(this.formDelete){
+      const userName = this.formDelete.get('userNameInput')?.value;
+      if(userName)
+        this.deleteUtilizator(userName);
+    }
+  }
+
   getUtilizatori(): void {
     this.utilizatorService.getUtilizatori().subscribe((utilizatori) => (this.utilizatori = utilizatori));
   }
@@ -71,5 +84,16 @@ export class UtilizatorComponent implements OnInit, OnChanges, OnDestroy {
 
   getUtilizatorProfil(userName: string): void {
     this.utilizatorService.getUtilizatorProfil(userName).subscribe((utilizatorProfil) => (this.utilizatorProfil = utilizatorProfil));
+  }
+
+  deleteUtilizator(userName: string): void {
+    this.utilizatorService.deleteUtilizator(userName).subscribe(
+      () => {
+        console.log('Utilizator sters');
+      },
+      error => {
+        console.log('Eroare', error);
+      }
+    );
   }
 }

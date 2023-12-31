@@ -9,7 +9,7 @@ import { AutentificareService } from "./autentificare.service";
 export class AuthGuard {
     constructor(private router: Router, private autentificateService: AutentificareService) {}
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    canActivate(): boolean {
         return this.verifAutentificare();
     }
 

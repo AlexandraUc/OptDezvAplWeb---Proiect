@@ -21,3 +21,42 @@
 </form>
 
 <p *ngIf="profil">Nume: {{ profil.nume }} Prenume: {{ profil.prenume }} Bio: {{ profil.bio }}</p>
+
+<!-- Modifica profil -->
+<form [formGroup]="formPut" (ngSubmit)="onClickPutProfil()">
+  <label for="numeInput">Nume: </label>
+  <input type="text" id="numeInput" formControlName="numeInput" placeholder="Introduceti nume" />
+
+  <label for="prenumeInput">Prenume: </label>
+  <input type="text" id="prenumeInput" formControlName="prenumeInput" placeholder="Introduceti prenume" />
+
+  <label for="bioInput">Bio: </label>
+  <input type="text" id="bioInput" formControlName="bioInput" placeholder="Introduceti bio" />
+
+  <button type="submit">Modifica</button>
+</form>
+
+<!-- Creaza profil -->
+<form [formGroup]="formPost" (ngSubmit)="onClickPostProfil()">
+  <label for="numeInput">Nume: </label>
+  <input type="text" id="numeInput" formControlName="numeInput" placeholder="Introduceti nume" />
+
+  <label for="prenumeInput">Prenume: </label>
+  <input type="text" id="prenumeInput" formControlName="prenumeInput" placeholder="Introduceti prenume" />
+
+  <label for="bioInput">Bio: </label>
+  <input type="text" id="bioInput" formControlName="bioInput" placeholder="Introduceti bio" />
+
+  <button type="submit">Creaza</button>
+</form>
+
+<!-- Sterge profil de admin -->
+<form [formGroup]="formDelete" (ngSubmit)="onClickDeleteProfil()">
+  <label for="idInput">Id: </label>
+  <input type="text" id="idInput" formControlName="idInput" placeholder="Introduceti id-ul" />
+
+  <button type="submit">Sterge</button>
+</form>
+
+<!-- Sterge profil de catre utilizator -->
+<button (click)="onClickDeleteProfilUtilizator()">Sterge profilul</button>

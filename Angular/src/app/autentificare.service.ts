@@ -19,7 +19,7 @@ export class AutentificareService {
     return this.http.post<LoginResponse>(this.loginUrl, credentials).pipe(
       catchError((error: any) => {
         console.error('Login failed:', error);
-        return throwError(() => new Error('test'));
+        return throwError(() => new Error());
       }),
       tap((response: LoginResponse) => {
         localStorage.setItem('token', response.token);
@@ -43,11 +43,17 @@ export class AutentificareService {
   }
 
   logout(): void {
+    const userName = this.getUserNameFromToken();
+
     localStorage.removeItem('token');
+    console.log('Logged out', userName);
   }
 
   verifAutentificare(): boolean {
     const token = localStorage.getItem('token');
+
+    if(!token)
+      return false;
 
     // Daca a expirat token ul il scoatem din local storage
     if(this.jwtHelper.isTokenExpired(token)){

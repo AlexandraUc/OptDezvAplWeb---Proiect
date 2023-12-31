@@ -5,3 +5,9 @@ export interface Profil {
     bio: string;
     utilizatorId: number;
 };
+
+export interface PostProfilDto {
+    nume: string;
+    prenume: string;
+    bio: string
+}

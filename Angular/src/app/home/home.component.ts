@@ -23,4 +23,8 @@ export class HomeComponent {
   onClickNavigateRegister(): void {
     this.router.navigate(['/register']);
   }
+
+  onClickNavigateSchimbaParola(): void {
+    this.router.navigate(['/schimba-parola']);
+  }
 }
