@@ -1,6 +1,6 @@
 <h2>Articole</h2>
-<!-- Get Articole
-<button (click)="onClickGetArticole()"></button>
+<!-- Get Articole -->
+<button (click)="onClickGetArticole()">Articole</button>
 
 <div *ngIf="articole.length > 0">
     <h3>Articole:</h3>
@@ -10,10 +10,9 @@
       </li>
     </ul>
   </div>
--->
 
-<!-- Get Articole grupate
-<button (click)="onClickGetArticoleGrupate()"></button>
+<!-- Get Articole grupate -->
+<button (click)="onClickGetArticoleGrupate()">Articole grupate</button>
 
 <div *ngFor="let utilizatorDto of articolUtilizatorDtoList">
   <h3>{{ utilizatorDto.userName }}</h3>
@@ -23,9 +22,8 @@
     </li>
   </ul>
 </div>
--->
 
-<!-- Get articol dupa titlu
+<!-- Get articol dupa titlu -->
 <form [formGroup]="form" (ngSubmit)="onClickGetArticolTitlu()">
   <label for="titluInput">Titlu:</label>
   <input type="text" id="titluInput" formControlName="titluInput" placeholder="Introduceti titlu" />
@@ -33,7 +31,6 @@
 </form>
 
 <p *ngIf="articol">Titlu: {{ articol.titlu }}, Continut: {{ articol.continut }}, Autor: {{ articol.utilizatorId }}</p>
--->
 
 <!-- Get articole dupa autor -->
 <form [formGroup]="form2" (ngSubmit)="onClickGetArticoleAutor()">
@@ -51,3 +48,43 @@
   </ul>
 </div>
 
+<!-- Modifica articol -->
+<form [formGroup]="formPut" (ngSubmit)="onClickPutArticol()">
+  <label for="titluInput">Titlu original: </label>
+  <input type="text" id="titluInput" formControlName="titluInput" placeholder="Introduceti titlul"/>
+
+  <label for="titluModificatInput">Titlu nou: </label>
+  <input type="text" id="titluModificatInput" formControlName="titluModificatInput" placeholder="Introduceti noul titlu"/>
+
+  <label for="continutModificatInput">Continut nou: </label>
+  <input type="text" id="continutModificatInput" formControlName="continutModificatInput" placeholder="Introduceti continutul"/>
+
+  <button type="submit">Modifica</button>
+</form>
+
+<!-- Adauga articol -->
+<form [formGroup]="formPost" (ngSubmit)="onClickPostArticol()">
+  <label for="titluInput">Titlu: </label>
+  <input type="text" id="titluInput" formControlName="titluInput" placeholder="Introduceti titlul"/>
+
+  <label for="continutInput">Continut : </label>
+  <input type="text" id="continutInput" formControlName="continutInput" placeholder="Introduceti continutul"/>
+
+  <button type="submit">Adauga</button>
+</form>
+
+<!-- Sterge articol -->
+<form [formGroup]="formDelete" (ngSubmit)="onClickDeleteArticol()">
+  <label for="idInput">Id: </label>
+  <input type="text" id="idInput" formControlName="idInput" placeholder="Introduceti id-ul"/>
+
+  <button type="submit">Sterge</button>
+</form>
+
+<!-- Sterge articol de catre autor -->
+<form [formGroup]="formDeleteAutor" (ngSubmit)="onClickDeleteArticolAutor()">
+  <label for="titluInput">Titlu: </label>
+  <input type="text" id="titluInput" formControlName="titluInput" placeholder="Introduceti titlul"/>
+
+  <button type="submit">Sterge</button>
+</form>

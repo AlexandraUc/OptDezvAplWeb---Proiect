@@ -82,13 +82,13 @@ namespace Proiect.Controllers
         }
 
         // Put
-        [HttpPut("{id}")]
+        [HttpPut("{titlu}")]
         [Authorize(Roles = "Autor")]
-        public async Task<IActionResult> PutArticol(int id, ArticolFaraIdDto articol)
+        public async Task<IActionResult> PutArticol(string titlu, ArticolFaraIdDto articol)
         {
             var userName = User.Identity.Name;
 
-            var ar = await _articolRepository.PutArticolAsync(userName, id, _mapper.Map<Articol>(articol));
+            var ar = await _articolRepository.PutArticolAsync(userName, titlu, _mapper.Map<Articol>(articol));
 
             if(ar == null)
                 return NotFound();

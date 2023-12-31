@@ -49,11 +49,11 @@ namespace Proiect.Repositories
 
             return articole;
         }
-        public async Task<Articol?> PutArticolAsync(string? userName, int id, Articol articol)
+        public async Task<Articol?> PutArticolAsync(string? userName, string titlu, Articol articol)
         {
             // Verifica daca exista articolul si daca este scris de utilizatorul care face request ul
 
-            var ar = await _context.Articol.FindAsync(id);
+            var ar = await GetArticolAsync(titlu);
 
             if (ar == null)
                 return null;

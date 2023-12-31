@@ -9,3 +9,8 @@ export interface Articol {
     userName: string;
     articole: Articol[]; 
   }
+
+  export interface ArticolFaraIdDto {
+    titlu: string;
+    continut: string;
+  }
