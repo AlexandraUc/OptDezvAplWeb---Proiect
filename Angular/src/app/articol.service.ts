@@ -16,7 +16,7 @@ export class ArticolService {
   // in care este injectat o instanta de HttpClient la creearea unui service
   constructor(private http: HttpClient) {}
 
-  // Get generic
+  // Get simplu
   getArticole(): Observable<Articol[]> {
     return this.http.get<Articol[]>(this.getArticoleUrl);
   }
@@ -44,6 +44,13 @@ export class ArticolService {
     const putArticolUrl = `${this.getArticoleUrl}/${titlu}`;
     const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
     return this.http.put<ArticolFaraIdDto>(putArticolUrl, articol, { headers });
+  }
+
+  // Put articol la profil
+  putArticolProfil(titlu: string): Observable<any> {
+    const putArticolProfilUrl = `https://localhost:7295/api/ArticolProfil/titlu/${titlu}`;
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
+    return this.http.put<any>(putArticolProfilUrl, null, { headers });
   }
 
   // Post articol

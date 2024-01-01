@@ -5,19 +5,21 @@ import { AutentificareService } from "./autentificare.service";
 @Injectable({
     providedIn: 'root'
 })
-export class AuthGuard {
+export class AdminAuthGuard {
     constructor(private router: Router, private autentificateService: AutentificareService) {}
 
     canActivate(): boolean {
-        return this.verifAutentificare();
+        return this.verifAdmin();
     }
 
-    private verifAutentificare(): boolean {
+    private verifAdmin(): boolean {
         if(this.autentificateService.verifAutentificare()){
-            return true;
-        } else {
-            this.router.navigate(['/login']);
+            var roluri = this.autentificateService.getRoluriFromToken();
+
+            if(roluri?.includes('Admin'))
+                return true;
             return false;
         }
+        return false;
     }
 }

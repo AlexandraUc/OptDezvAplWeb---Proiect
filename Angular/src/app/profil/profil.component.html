@@ -9,21 +9,47 @@
       <li *ngFor="let profil of profiluri">
         Nume: {{ profil.nume }} Prenume: {{ profil.prenume }}
         Bio:  {{ profil.bio }}
+        Articole favorite: 
+
+        <ul>
+          <li *ngFor="let articol of profil.articole">
+            Articol: {{ articol.titlu }}
+          </li>
+        </ul>
       </li>
     </ul>
 </div>
 
+<!-- Get utilizator cu date din profil -->
+<form [formGroup]="formUtilizator" (ngSubmit)="onClickGetUtilizatorProfil()">
+  <label for="userNameInput">UserName: </label>
+  <input type="text" id="userNameInput" formControlName="userNameInput" placeholder="Introduceti UserName">
+  <button type="submit">Cauta</button>
+</form>
+
+<p *ngIf="utilizatorProfil">
+  UserName: {{ utilizatorProfil.userName }}
+  Nume: {{ utilizatorProfil.nume }}
+  Prenume: {{ utilizatorProfil.prenume }}
+</p>
+
 <!-- Get profil dupa id -->
-<form [formGroup]="form" (ngSubmit)="onClickGetProfilId()">
+<form *ngIf="getRoluri().includes('Admin')" [formGroup]="form" (ngSubmit)="onClickGetProfilId()">
     <label for="idInput">Id: </label>
     <input type="text" id="idInput" formControlName="idInput" placeholder="Introduceti id" />
     <button type="submit">Cauta</button>
 </form>
 
-<p *ngIf="profil">Nume: {{ profil.nume }} Prenume: {{ profil.prenume }} Bio: {{ profil.bio }}</p>
+<p *ngIf="profil">Nume: {{ profil.nume }} Prenume: {{ profil.prenume }} Bio: {{ profil.bio }} Articole favorite:</p>
+
+<ul *ngIf="profil">
+  <li *ngFor="let articol of profil.articole">
+    Articole: {{ articol.titlu }}
+  </li>
+</ul>
 
 <!-- Modifica profil -->
-<form [formGroup]="formPut" (ngSubmit)="onClickPutProfil()">
+<form *ngIf="verifAutentificare()" [formGroup]="formPut" (ngSubmit)="onClickPutProfil()">
   <label for="numeInput">Nume: </label>
   <input type="text" id="numeInput" formControlName="numeInput" placeholder="Introduceti nume" />
 
@@ -51,7 +77,7 @@
 </form>
 
 <!-- Sterge profil de admin -->
-<form [formGroup]="formDelete" (ngSubmit)="onClickDeleteProfil()">
+<form *ngIf="getRoluri().includes('Admin')" [formGroup]="formDelete" (ngSubmit)="onClickDeleteProfil()">
   <label for="idInput">Id: </label>
   <input type="text" id="idInput" formControlName="idInput" placeholder="Introduceti id-ul" />
 
@@ -59,4 +85,4 @@
 </form>
 
 <!-- Sterge profil de catre utilizator -->
-<button (click)="onClickDeleteProfilUtilizator()">Sterge profilul</button>
+<button *ngIf="verifAutentificare()" (click)="onClickDeleteProfilUtilizator()">Sterge profilul</button>

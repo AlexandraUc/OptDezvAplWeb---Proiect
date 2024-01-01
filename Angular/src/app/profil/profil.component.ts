@@ -1,10 +1,14 @@
 import { Component, OnInit, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AutentificareService } from '../autentificare.service';
+import { UtilizatorService } from '../utilizator.service';
 import { ProfilService } from '../profil.service';
 import { Profil } from './profil.model';
 import { PostProfilDto } from './profil.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { UtilizatorProfilDto } from '../utilizator/utilizator.model';
 
 @Component({
   selector: 'app-profil',
@@ -16,19 +20,26 @@ import { ReactiveFormsModule } from '@angular/forms';
 export class ProfilComponent implements OnInit, OnChanges, OnDestroy {
   profil!: Profil;
   profiluri: Profil[] = [];
+  utilizatorProfil!: UtilizatorProfilDto;
   profilPut: PostProfilDto = {nume: '', prenume: '', bio: ''};
   profilPost: PostProfilDto = {nume: '', prenume: '', bio: ''};
 
   form!: FormGroup;
+  formUtilizator!: FormGroup;
   formPut!: FormGroup;
   formPost!: FormGroup;
   formDelete!: FormGroup
 
-  constructor(private profilService: ProfilService) {}
+  constructor(private profilService: ProfilService, private autentificareService: AutentificareService, 
+        private utilizatorService: UtilizatorService, private router: Router) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
       idInput: new FormControl('')
+    });
+
+    this.formUtilizator = new FormGroup({
+      userNameInput: new FormControl('')
     });
 
     this.formPut = new FormGroup({
@@ -69,6 +80,14 @@ export class ProfilComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  onClickGetUtilizatorProfil(): void {
+    if(this.formUtilizator){
+      const userName = this.formUtilizator.get('userNameInput')?.value;
+      if(userName)
+        this.getUtilizatorProfil(userName);
+    }
+  }
+
   onClickPutProfil(): void {
     if(this.formPut){
       this.profilPut.nume = this.formPut.get('numeInput')?.value;
@@ -80,6 +99,9 @@ export class ProfilComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onClickPostProfil(): void {
+    if(!this.verifAutentificare())
+      this.router.navigate(['/login']);
+
     if(this.formPost){
       this.profilPost.nume = this.formPost.get('numeInput')?.value;
       this.profilPost.prenume = this.formPost.get('prenumeInput')?.value;
@@ -104,6 +126,10 @@ export class ProfilComponent implements OnInit, OnChanges, OnDestroy {
 
   getProfiluri(): void {
     this.profilService.getProfiluri().subscribe((profiluri) => (this.profiluri = profiluri));
+  }
+
+  getUtilizatorProfil(userName: string): void {
+    this.utilizatorService.getUtilizatorProfil(userName).subscribe((utilizatorProfil) => (this.utilizatorProfil) = utilizatorProfil);
   }
 
   getProfilId(id: number): void {
@@ -152,5 +178,16 @@ export class ProfilComponent implements OnInit, OnChanges, OnDestroy {
         console.log('Eroare', error);
       }
     );
+  }
+
+  verifAutentificare(): boolean {
+    return this.autentificareService.verifAutentificare();
+  }
+  
+  getRoluri(): string[] {
+    var roluri = this.autentificareService.getRoluriFromToken();
+    if(roluri)
+      return roluri;
+    return [];
   }
 }

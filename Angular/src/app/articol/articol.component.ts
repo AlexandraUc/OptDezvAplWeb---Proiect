@@ -1,11 +1,13 @@
 import { Component, OnInit, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ArticolService } from '../articol.service';
+import { AutentificareService } from '../autentificare.service';
 import { Articol } from './articol.model';
 import { ArticolUtilizatorDto } from './articol.model';
 import { ArticolFaraIdDto } from './articol.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-articol',
@@ -28,11 +30,12 @@ export class ArticolComponent implements OnInit, OnChanges, OnDestroy {
   form!: FormGroup;
   form2!: FormGroup;
   formPut!: FormGroup;
+  formPut2!: FormGroup;
   formPost!: FormGroup;
   formDelete!: FormGroup;
   formDeleteAutor!: FormGroup;
 
-  constructor(private articolService: ArticolService) {}
+  constructor(private articolService: ArticolService, private autentificareService: AutentificareService, private router: Router) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -47,6 +50,10 @@ export class ArticolComponent implements OnInit, OnChanges, OnDestroy {
       titluInput: new FormControl('', Validators.required),
       titluModificatInput: new FormControl('', Validators.required),
       continutModificatInput: new FormControl('', Validators.required)
+    });
+
+    this.formPut2 = new FormGroup({
+      titluInput: new FormControl('', Validators.required)
     });
 
     this.formPost = new FormGroup({
@@ -109,6 +116,17 @@ export class ArticolComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  onClickPutArticolProfil(): void {
+    if(!this.autentificareService.verifAutentificare())
+      this.router.navigate(['/login']);
+    
+    if(this.formPut2.valid){
+      const titlu = this.formPut2.get('titluInput')?.value;
+
+      this.putArticolProfil(titlu);
+    }
+  }
+
   onClickPostArticol(): void {
     if(this.formPost.valid){
       this.articolPost.titlu = this.formPost.get('titluInput')?.value;
@@ -168,6 +186,18 @@ export class ArticolComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
+  putArticolProfil(titlu: string): void {
+
+    this.articolService.putArticolProfil(titlu).subscribe(
+      () => {
+        console.log('Articol adaugat');
+      },
+      error => {
+        console.error('Eroare: ', error);
+      }
+    );
+  }
+
   postArticol(): void {
     this.articolService.postArticol(this.articolPost).subscribe(
       () => {
@@ -199,5 +229,16 @@ export class ArticolComponent implements OnInit, OnChanges, OnDestroy {
         console.log('Eroare', error);
       }
     );
+  }
+
+  verifAutentificare(): boolean {
+    return this.autentificareService.verifAutentificare();
+  }
+
+  getRoluri(): string[] {
+    var roluri = this.autentificareService.getRoluriFromToken();
+    if(roluri)
+      return roluri;
+    return [];
   }
 }

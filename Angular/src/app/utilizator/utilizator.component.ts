@@ -5,11 +5,12 @@ import { Utilizator } from './utilizator.model';
 import { UtilizatorProfilDto } from './utilizator.model';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-utilizator',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterOutlet],
   templateUrl: './utilizator.component.html',
   styleUrl: './utilizator.component.scss'
 })

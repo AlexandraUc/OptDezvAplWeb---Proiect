@@ -2,7 +2,10 @@
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Proiect.UnitsOfWork;
+using Proiect.ContextModels;
+using Proiect.Entities;
+using Proiect.Repositories;
+using Proiect.Services;
 
 namespace Proiect.Controllers
 {
@@ -10,44 +13,44 @@ namespace Proiect.Controllers
     [ApiController]
     public class ArticolProfilController: ControllerBase
     {
-        private readonly IArticolProfilUnitOfWork _unitOfWork;
-        public ArticolProfilController(IArticolProfilUnitOfWork unitOfWork)
+        private readonly ProiectContext _context;
+        private readonly IArticolRepository _articolRepository;
+        private readonly IProfilRepository _profilRepository;
+        private readonly IUtilizatorService _utilizatorService;
+        public ArticolProfilController(ProiectContext context, IArticolRepository articolRepository, IProfilRepository profilRepository, IUtilizatorService utilizatorService)
         {
-            _unitOfWork = unitOfWork;
+            _context = context;
+            _articolRepository = articolRepository;
+            _profilRepository = profilRepository;
+            _utilizatorService = utilizatorService;
         }
 
-        [HttpPut("titlu")]
+        [HttpPut("titlu/{titlu}")]
         [Authorize]
         public async Task<IActionResult> PutArticolProfil(string titlu)
         {
             var userName = User.Identity.Name;
 
-            try
+            var utilizator = await _utilizatorService.GetUtilizator(userName);
+            var profil = await _profilRepository.GetProfilUtilizatorAsync(utilizator.Id);
+            var articol = await _articolRepository.GetArticolAsync(titlu);
+
+            if (profil != null && articol != null)
             {
-                _unitOfWork.BeginTransaction();
+                if (profil.Articole == null)
+                    profil.Articole = new List<Articol>();
 
-                var utilizator = await _unitOfWork.UtilizatorService.GetUtilizator(userName);
+                if (articol.Profiluri == null)
+                    articol.Profiluri = new List<Profil>();
 
-                var profil = await _unitOfWork.ProfilRepository.GetProfilUtilizatorAsync(utilizator.Id);
+                profil.Articole.Add(articol);
+                articol.Profiluri.Add(profil);
 
-                var articol = await _unitOfWork.ArticolRepository.GetArticolAsync(titlu);
+                await _context.SaveChangesAsync();
 
-                if (_unitOfWork.AtribuieArticolProfil(articol, profil))
-                {
-                    _unitOfWork.Commit();
-                    return Ok();
-                }
-                else
-                {
-                    _unitOfWork.Rollback();
-                    return BadRequest();
-                }
+                return Ok();
             }
-            catch(Exception)
-            {
-                _unitOfWork.Rollback();
-                return BadRequest();
-            }
+            return BadRequest();
         }
     }
 }

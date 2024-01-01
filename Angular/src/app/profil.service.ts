@@ -14,8 +14,7 @@ export class ProfilService {
   constructor(private http: HttpClient) {}
 
   getProfiluri(): Observable<Profil[]> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
-    return this.http.get<Profil[]>(this.getProfiluriUrl, { headers });
+    return this.http.get<Profil[]>(this.getProfiluriUrl);
   }
 
   getProfilId(id: number): Observable<Profil> {

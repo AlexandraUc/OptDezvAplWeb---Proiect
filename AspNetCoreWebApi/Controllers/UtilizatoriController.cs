@@ -59,8 +59,9 @@ namespace Proiect.Controllers
             return Ok(utilizator);
         }
 
-        // Delete de admin, poate sterge orice utilizator
-        [HttpDelete("{id}")]
+        // Delete de admin, poate sterge orice utilizator 
+        // De modificat sa stearga si profilul si articolele daca exista
+        [HttpDelete("{userName}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUtilizator(string userName)
         {

@@ -6,7 +6,7 @@
     <h3>Articole:</h3>
     <ul>
       <li *ngFor="let articol of articole">
-        <strong>{{ articol.titlu }}</strong> - {{ articol.continut }} (Autor: {{ articol.utilizatorId }})
+        <strong>{{ articol.titlu }}</strong> - {{ articol.continut }}
       </li>
     </ul>
   </div>
@@ -49,7 +49,7 @@
 </div>
 
 <!-- Modifica articol -->
-<form [formGroup]="formPut" (ngSubmit)="onClickPutArticol()">
+<form *ngIf="getRoluri().includes('Autor')" [formGroup]="formPut" (ngSubmit)="onClickPutArticol()">
   <label for="titluInput">Titlu original: </label>
   <input type="text" id="titluInput" formControlName="titluInput" placeholder="Introduceti titlul"/>
 
@@ -62,8 +62,16 @@
   <button type="submit">Modifica</button>
 </form>
 
+<!-- Adauga articol la profil -->
+<form [formGroup]="formPut2" (ngSubmit)="onClickPutArticolProfil()">
+  <label for="titluInput">Titlu: </label>
+  <input type="text" id="titluInput" formControlName="titluInput" placeholder="Introduceti titlul"/>
+
+  <button type="submit">Adauga la favorite</button>
+</form>
+
 <!-- Adauga articol -->
-<form [formGroup]="formPost" (ngSubmit)="onClickPostArticol()">
+<form *ngIf="getRoluri().includes('Autor')" [formGroup]="formPost" (ngSubmit)="onClickPostArticol()">
   <label for="titluInput">Titlu: </label>
   <input type="text" id="titluInput" formControlName="titluInput" placeholder="Introduceti titlul"/>
 
@@ -73,8 +81,8 @@
   <button type="submit">Adauga</button>
 </form>
 
-<!-- Sterge articol -->
-<form [formGroup]="formDelete" (ngSubmit)="onClickDeleteArticol()">
+<!-- Sterge articol de admin -->
+<form *ngIf="getRoluri().includes('Admin')" [formGroup]="formDelete" (ngSubmit)="onClickDeleteArticol()">
   <label for="idInput">Id: </label>
   <input type="text" id="idInput" formControlName="idInput" placeholder="Introduceti id-ul"/>
 
@@ -82,7 +90,7 @@
 </form>
 
 <!-- Sterge articol de catre autor -->
-<form [formGroup]="formDeleteAutor" (ngSubmit)="onClickDeleteArticolAutor()">
+<form *ngIf="getRoluri().includes('Autor')" [formGroup]="formDeleteAutor" (ngSubmit)="onClickDeleteArticolAutor()">
   <label for="titluInput">Titlu: </label>
   <input type="text" id="titluInput" formControlName="titluInput" placeholder="Introduceti titlul"/>
 

@@ -24,7 +24,6 @@ namespace Proiect.Controllers
 
         // Get
         [HttpGet]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetProfiluri()
         {
             if(_context.Profil == null)

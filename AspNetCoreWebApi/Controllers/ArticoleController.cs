@@ -4,7 +4,6 @@ using Proiect.ContextModels;
 using Proiect.Entities;
 using Proiect.Models;
 using Proiect.Repositories;
-using Proiect.UnitsOfWork;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 
@@ -16,14 +15,12 @@ namespace Proiect.Controllers
     {
         private readonly ProiectContext _context;
         private readonly IArticolRepository _articolRepository;
-        private readonly IArticolProfilUnitOfWork _articolProfilUnitOfWork;
         private readonly IMapper _mapper;
 
-        public ArticoleController(ProiectContext context, IArticolProfilUnitOfWork articolProfilUnitOfWork, IArticolRepository articolRepository, IMapper mapper)
+        public ArticoleController(ProiectContext context, IArticolRepository articolRepository, IMapper mapper)
         {
             _context = context;
             _articolRepository = articolRepository;
-            _articolProfilUnitOfWork = articolProfilUnitOfWork;
             _mapper = mapper;
         }
 

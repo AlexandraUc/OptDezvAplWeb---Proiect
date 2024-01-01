@@ -42,6 +42,19 @@ export class AutentificareService {
     return null;
   }
 
+  getRoluriFromToken(): string[] | null {
+    const token = localStorage.getItem('token');
+
+    if(token){
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      var roluri = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+      // console.log(roluri);
+      return roluri;
+    }
+    return null;
+  } 
+
   logout(): void {
     const userName = this.getUserNameFromToken();
 
