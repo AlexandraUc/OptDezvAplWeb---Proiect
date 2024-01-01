@@ -10,6 +10,7 @@ namespace Proiect.Repositories
         public Task<bool> PutProfilAsync(string? userName, Profil profil);
         public Task<bool> PostProfilAsync(string? userName, Profil profil);
         public Task DeleteProfilAsync(Profil profil);
+        public void DeleteProfilFaraSave(Profil profil);
         public Task<bool> DeleteProfilUtilizatorAsync(string userName);
     }
 }

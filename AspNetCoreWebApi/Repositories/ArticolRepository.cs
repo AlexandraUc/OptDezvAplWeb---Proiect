@@ -93,6 +93,11 @@ namespace Proiect.Repositories
 
             return true;
         }
+
+        public void DeleteArticolUtilizator(Articol articol)
+        {
+            _context.Articol.Remove(articol);
+        }
         public async Task<bool> DeleteArticolUtilizatorAsync(string userName, Articol articol)
         {
             if(await _utilizatorService.VerificaArticol(userName, articol))

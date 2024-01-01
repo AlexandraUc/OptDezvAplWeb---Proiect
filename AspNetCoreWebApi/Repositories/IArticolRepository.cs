@@ -12,6 +12,7 @@ namespace Proiect.Repositories
         public Task<Articol?> PutArticolAsync(string? userName, string titlu, Articol articol);
         public Task<Articol?> PostArticolAsync(string userName, Articol articol);
         public Task<bool> DeleteArticolAsync(int id);
+        public void DeleteArticolUtilizator(Articol articol);
         public Task<bool> DeleteArticolUtilizatorAsync(string userName, Articol articol);
     }
 }

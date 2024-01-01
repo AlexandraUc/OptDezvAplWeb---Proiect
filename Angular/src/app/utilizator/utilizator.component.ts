@@ -1,6 +1,7 @@
 import { Component, OnInit, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UtilizatorService } from '../utilizator.service';
+import { AutentificareService } from '../autentificare.service';
 import { Utilizator } from './utilizator.model';
 import { UtilizatorProfilDto } from './utilizator.model';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -23,7 +24,7 @@ export class UtilizatorComponent implements OnInit, OnChanges, OnDestroy {
   form2!: FormGroup;
   formDelete!: FormGroup;
 
-  constructor(private utilizatorService: UtilizatorService) {}
+  constructor(private utilizatorService: UtilizatorService, private autentificareService: AutentificareService) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -91,6 +92,9 @@ export class UtilizatorComponent implements OnInit, OnChanges, OnDestroy {
     this.utilizatorService.deleteUtilizator(userName).subscribe(
       () => {
         console.log('Utilizator sters');
+        
+        if(userName == this.autentificareService.getUserNameFromToken())
+          this.autentificareService.logout();
       },
       error => {
         console.log('Eroare', error);

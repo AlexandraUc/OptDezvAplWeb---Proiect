@@ -39,6 +39,10 @@ namespace Proiect.Repositories
 
             return utilizator;
         }
+        public void DeleteUtilizator(Utilizator utilizator)
+        {
+            _context.Utilizator.Remove(utilizator);
+        }
         public async Task<bool> DeleteUtilizatorAsync(string userName)
         {
             var utilizator = await _userManager.FindByNameAsync(userName);

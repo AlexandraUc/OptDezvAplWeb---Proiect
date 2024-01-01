@@ -8,6 +8,7 @@ namespace Proiect.Repositories
         public Task<ICollection<Utilizator>> GetUtilizatoriAsync();
         public Task<Utilizator?> GetUtilizatorAsync(string id);
         public Task<UtilizatorProfilDto?> GetUtilizatorProfilDtoAsync(string userName);
+        public void DeleteUtilizator(Utilizator utilizator);
         public Task<bool> DeleteUtilizatorAsync(string userName);
     }
 }

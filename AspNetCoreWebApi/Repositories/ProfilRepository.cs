@@ -75,6 +75,11 @@ public class ProfilRepository: IProfilRepository
         _context.Profil.Remove(profil);
         await _context.SaveChangesAsync();
     }
+
+    public void DeleteProfilFaraSave(Profil profil)
+    {
+        _context.Profil.Remove(profil);
+    }
     public async Task<bool> DeleteProfilUtilizatorAsync(string userName)
     {
         var utilizator = await _utilizatorService.GetUtilizator(userName);
