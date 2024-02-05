@@ -1,9 +1,9 @@
 <h2>Profiluri</h2>
 
 <!-- Get profiluri -->
-<button (click)="onClickGetProfiluri()">Profiluri</button>
+<button class="simple-button" (click)="onClickGetProfiluri()">Profiluri</button>
 
-<div *ngIf="profiluri.length > 0">
+<div class="profiluri" *ngIf="profiluri.length > 0">
     <h3>Profiluri:</h3>
     <ul>
       <li *ngFor="let profil of profiluri">
@@ -21,7 +21,7 @@
 </div>
 
 <!-- Get utilizator cu date din profil -->
-<form [formGroup]="formUtilizator" (ngSubmit)="onClickGetUtilizatorProfil()">
+<form class="form" [formGroup]="formUtilizator" (ngSubmit)="onClickGetUtilizatorProfil()">
   <label for="userNameInput">UserName: </label>
   <input type="text" id="userNameInput" formControlName="userNameInput" placeholder="Introduceti UserName">
   <button type="submit">Cauta</button>
@@ -34,7 +34,7 @@
 </p>
 
 <!-- Get profil dupa id -->
-<form *ngIf="getRoluri().includes('Admin')" [formGroup]="form" (ngSubmit)="onClickGetProfilId()">
+<form class="form" *ngIf="getRoluri().includes('Admin')" [formGroup]="form" (ngSubmit)="onClickGetProfilId()">
     <label for="idInput">Id: </label>
     <input type="text" id="idInput" formControlName="idInput" placeholder="Introduceti id" />
     <button type="submit">Cauta</button>
@@ -42,14 +42,14 @@
 
 <p *ngIf="profil">Nume: {{ profil.nume }} Prenume: {{ profil.prenume }} Bio: {{ profil.bio }} Articole favorite:</p>
 
-<ul *ngIf="profil">
+<ul class="articole-profil" *ngIf="profil">
   <li *ngFor="let articol of profil.articole">
     Articole: {{ articol.titlu }}
   </li>
 </ul>
 
 <!-- Modifica profil -->
-<form *ngIf="verifAutentificare()" [formGroup]="formPut" (ngSubmit)="onClickPutProfil()">
+<form class="form" *ngIf="verifAutentificare()" [formGroup]="formPut" (ngSubmit)="onClickPutProfil()">
   <label for="numeInput">Nume: </label>
   <input type="text" id="numeInput" formControlName="numeInput" placeholder="Introduceti nume" />
 
@@ -63,7 +63,7 @@
 </form>
 
 <!-- Creaza profil -->
-<form [formGroup]="formPost" (ngSubmit)="onClickPostProfil()">
+<form class="form" [formGroup]="formPost" (ngSubmit)="onClickPostProfil()">
   <label for="numeInput">Nume: </label>
   <input type="text" id="numeInput" formControlName="numeInput" placeholder="Introduceti nume" />
 
@@ -77,7 +77,7 @@
 </form>
 
 <!-- Sterge profil de admin -->
-<form *ngIf="getRoluri().includes('Admin')" [formGroup]="formDelete" (ngSubmit)="onClickDeleteProfil()">
+<form class="form" *ngIf="getRoluri().includes('Admin')" [formGroup]="formDelete" (ngSubmit)="onClickDeleteProfil()">
   <label for="idInput">Id: </label>
   <input type="text" id="idInput" formControlName="idInput" placeholder="Introduceti id-ul" />
 
@@ -85,4 +85,4 @@
 </form>
 
 <!-- Sterge profil de catre utilizator -->
-<button *ngIf="verifAutentificare()" (click)="onClickDeleteProfilUtilizator()">Sterge profilul</button>
+<button class="simple-button" *ngIf="verifAutentificare()" (click)="onClickDeleteProfilUtilizator()">Sterge profilul</button>

@@ -1,9 +1,11 @@
+<div id="navbar">
+    <button (click)="onClickNavigateLogin()">Login</button>
+    <button (click)="onClickNavigateRegister()">Register</button>
+    <button (click)="onClickNavigateSchimbaParola()">Schimba parola</button>
+</div>
+
 <app-articol></app-articol>
 
 <app-profil></app-profil>
-
-<button (click)="onClickNavigateLogin()">Login</button>
-<button (click)="onClickNavigateRegister()">Register</button>
-<button (click)="onClickNavigateSchimbaParola()">Schimba parola</button>
 
 <router-outlet></router-outlet>

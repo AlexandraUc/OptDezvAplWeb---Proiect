@@ -11,7 +11,5 @@ import { RouterOutlet, Router } from '@angular/router';
 export class AppComponent {
   title = 'Angular';
 
-  titlu: string = 'Blog horror';
-
   constructor(private router: Router) {}
 }

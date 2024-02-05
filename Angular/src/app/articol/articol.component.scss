@@ -1,0 +1,54 @@
+h2 {
+    color: indigo;
+    margin-left: 10%;
+}
+
+.simple-button {
+    background-color: indigo;
+    color: white;
+    display: block;
+    font-size: medium;
+    margin-left: 10px;
+    border: none;
+    border-radius: 8%;
+    padding: 5px 8px;
+    cursor: pointer;
+    margin: 5px 5px;
+    margin-left: 8%;
+    width: 140px;
+    
+    &:last-of-type {
+        margin-bottom: 25px;
+    }
+}
+
+.simple-button:hover {
+    background-color: purple;
+}
+
+.articole {
+    margin-left: 6%;
+}
+
+.form {
+    margin-left: 8%;
+}
+
+form {
+    button {
+        background-color: indigo;
+        border: none;
+        color: white;
+        height: 21px;
+        border-radius: 5%;
+        margin-left: 2px;
+    }
+
+    button:hover {
+        background-color: purple;
+    }
+}
+
+p {
+    margin-left: 8%;
+}

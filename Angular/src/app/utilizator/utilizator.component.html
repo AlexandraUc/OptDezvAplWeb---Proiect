@@ -1,19 +1,19 @@
 <h2>Utilizatori</h2>
 
-<button (click)="onClickGetUtilizatori()">Utilizatori</button>
+<button class="simple-button" (click)="onClickGetUtilizatori()">Utilizatori</button>
 
 <!-- Get Utilizatori -->
-<div *ngIf="utilizatori.length > 0">
+<div class="utilizatori" *ngIf="utilizatori.length > 0">
     <h3>Utilizatori</h3>
     <ul>
         <li *ngFor="let utilizator of utilizatori">
-            UserName: {{ utilizator.userName }}
+            UserName: {{ utilizator.userName }} Id: {{ utilizator.id }}
         </li>
     </ul>
 </div>
 
 <!-- Get utilizator dupa id -->
-<form [formGroup]="form" (ngSubmit)="onClickGetUtilizatorId()">
+<form class="form" [formGroup]="form" (ngSubmit)="onClickGetUtilizatorId()">
     <label for="idInput">Id: </label> 
     <input type="text" id="idInput" formControlName="idInput" placeholder="Introduceti id">
     <button type="submit">Cauta</button>
@@ -22,7 +22,7 @@
 <p *ngIf="utilizator">UserName: {{ utilizator.userName }}</p>
 
 <!-- Get utilizator cu date din profil -->
-<form [formGroup]="form2" (ngSubmit)="onClickGetUtilizatorProfil()">
+<form class="form" [formGroup]="form2" (ngSubmit)="onClickGetUtilizatorProfil()">
     <label for="userNameInput">UserName: </label>
     <input type="text" id="userNameInput" formControlName="userNameInput" placeholder="Introduceti UserName">
     <button type="submit">Cauta</button>
@@ -35,7 +35,7 @@
 </p>
 
 <!-- Sterge utilizator de admin -->
-<form [formGroup]="formDelete" (ngSubmit)="onClickDeleteUtilizator()">
+<form class="form" [formGroup]="formDelete" (ngSubmit)="onClickDeleteUtilizator()">
     <label for="userNameInput">UserName: </label>
     <input type="text" id="userNameInput" formControlName="userNameInput" placeholder="Introduceti UserName">
     <button type="submit">Sterge</button>

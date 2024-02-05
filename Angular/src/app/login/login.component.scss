@@ -1,0 +1,23 @@
+#login, #logout {
+    margin: 10px 10px;
+}
+
+#login button {
+    margin-left: 1px;
+}
+
+button {
+    background-color: indigo;
+    border: none;
+    border-radius: 5%;
+    color: white;
+    height: 22px;
+}
+
+button:hover {
+    background-color: purple;
+}
+
+p {
+    margin-left: 10px;
+}
