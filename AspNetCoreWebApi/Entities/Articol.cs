@@ -16,7 +16,6 @@ namespace Proiect.Entities
         public Utilizator? Utilizator { get; set; }
 
         // Many to many cu Profil (mai multe profile pot avea la favorite mai multe articole)
-        // Ignora lista la serializare
         [JsonIgnore]
         public ICollection<Profil>? Profiluri { get; set; }
         public Articol() { }

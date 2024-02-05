@@ -14,9 +14,11 @@ import { RegisterModel } from './register.model';
 })
 export class RegisterComponent implements OnInit {
   invalidRegister: boolean = false;
+  registeredOk: boolean = false;
   registerInfo: RegisterModel = {userName: '', email: '', password: '', confirmPassword: ''};
   rol: string = 'viewer';  // Default e viewer
   mesajEroare: string = 'Inregistrare esuata';
+  verifAutor: boolean = false;
 
   form!: FormGroup;
 
@@ -27,7 +29,8 @@ export class RegisterComponent implements OnInit {
       userNameInput: new FormControl('', Validators.required),
       emailInput: new FormControl ('', [Validators.required, Validators.email]),
       passwordInput: new FormControl('', Validators.required),
-      confirmPasswordInput: new FormControl('', Validators.required)
+      confirmPasswordInput: new FormControl('', Validators.required),
+      verifAutor: new FormControl(false)
     });
   }
 
@@ -37,7 +40,11 @@ export class RegisterComponent implements OnInit {
       this.registerInfo.email = this.form.get('emailInput')?.value;
       this.registerInfo.password = this.form.get('passwordInput')?.value;
       this.registerInfo.confirmPassword = this.form.get('confirmPasswordInput')?.value;
+      if(this.form.get('verifAutor')?.value == true){
+        this.rol = 'autor';
+      }
       this.register();
+      this.registeredOk = true;
     } else {
       this.invalidRegister = true;
     }
@@ -51,10 +58,12 @@ export class RegisterComponent implements OnInit {
         
         // Dupa inregistrare imediat logheaza utilizatorul
         this.loginAfterRegister();
+        this.rol = 'viewer';
       },
       (error) => {
         console.log('Register failed');
         this.invalidRegister = false;
+        this.rol = 'viewer';
       }
     );
   }

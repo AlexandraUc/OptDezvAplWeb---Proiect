@@ -8,8 +8,11 @@
     <button type="submit">Login</button>
 </form>
 
+<p *ngIf="loggedIn">Logged in</p>
 <p *ngIf="invalidLogin">{{ mesajEroare }}</p>
 
 <button id="logout" (click)="onClickLogout()">Logout</button>
+
+<p *ngIf="loggedOut">Logged out</p>
 
 <router-outlet></router-outlet>

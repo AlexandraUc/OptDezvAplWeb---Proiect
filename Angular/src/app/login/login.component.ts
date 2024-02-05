@@ -14,6 +14,8 @@ import { LoginModel } from '../login.model';
 })
 export class LoginComponent implements OnInit {
   invalidLogin: boolean = false;
+  loggedIn: boolean = false;
+  loggedOut: boolean = false;
   loginInfo: LoginModel = {userName: '', password: ''};
   mesajEroare: string = 'Formular invalid';
 
@@ -33,6 +35,8 @@ export class LoginComponent implements OnInit {
       this.loginInfo.userName = this.form.get('userNameInput')?.value;
       this.loginInfo.password = this.form.get('passwordInput')?.value;
       this.login();
+      this.loggedIn = true;
+      this.loggedOut = false;
     } else {
       this.invalidLogin = true;
     }
@@ -40,6 +44,8 @@ export class LoginComponent implements OnInit {
 
   onClickLogout(): void {
     this.autentificareService.logout();
+    this.loggedOut = true;
+    this.loggedIn = false;
   }
 
   login(): void {

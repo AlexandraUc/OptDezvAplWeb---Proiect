@@ -11,7 +11,10 @@
     <label for="confirmPasswordInput">Confirmati parola</label>
     <input type="text" id="confirmPasswordInput" formControlName="confirmPasswordInput" placeholder="Confirmati parola">
 
+    <input type="checkbox" formControlName="verifAutor"> Autor
+
     <button type="submit">Register</button>
 </form>
 
 <p *ngIf="invalidRegister">{{ mesajEroare }}</p>
+<p *ngIf="registeredOk">Registered</p>
