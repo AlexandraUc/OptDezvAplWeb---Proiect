@@ -8,6 +8,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 
+// Accesibil la endpoint-ul /utilizatori daca e logat un admin
+
 @Component({
   selector: 'app-utilizator',
   standalone: true,

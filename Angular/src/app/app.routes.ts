@@ -13,6 +13,7 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'schimba-parola', component: SchimbaParolaComponent, canActivate: [AuthGuard] },
+    // Accesibil doar pentru admini
     { path: 'utilizatori', component: UtilizatorComponent, canActivate: [AdminAuthGuard] }
 ];
 
